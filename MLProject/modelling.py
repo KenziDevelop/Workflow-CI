@@ -22,7 +22,7 @@ if os.path.exists("saved_model"):
     shutil.rmtree("saved_model")
 
 # Membaca dataset
-df = pd.read_csv('sample_data/heart_preprocessing.csv')
+df = pd.read_csv('heart_preprocessing.csv')
 X = df.drop('HeartDisease', axis=1)
 y = df['HeartDisease']
 
