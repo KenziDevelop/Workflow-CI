@@ -9,18 +9,14 @@ from sklearn.metrics import accuracy_score
 import mlflow
 import mlflow.sklearn
 
-# PAKSA KE PORT MLFLOW UI
 mlflow.set_tracking_uri('http://localhost:5000')
 
-# Aktifkan autolog sesuai instruksi reviewer
 mlflow.autolog()
 
 if os.path.exists("saved_model"):
     shutil.rmtree("saved_model")
 
-# --- PERBAIKAN JALUR DI SINI ---
-# Membaca dari folder sesuai rekomendasi struktur Dicoding
-df = pd.read_csv('heart_preprocessing/heart_preprocessing.csv') 
+df = pd.read_csv('heart_preprocessing.csv')
 
 X = df.drop('HeartDisease', axis=1)
 y = df['HeartDisease']
@@ -37,14 +33,12 @@ with mlflow.start_run():
     mlflow.log_metric("accuracy_score", acc)
     mlflow.log_param("n_estimators_manual", 50)
 
-    # Simpan artefak gambar akurasi
     plt.figure(figsize=(4,3))
     plt.text(0.5, 0.5, f'Akurasi Model: {acc:.2f}', ha='center', va='center')
     plt.axis('off')
     plt.savefig("akurasi.png")
     mlflow.log_artifact("akurasi.png")
 
-    # Menyimpan model (Ini yang bikin file model.pkl, MLmodel, conda.yaml muncul di UI!)
     mlflow.sklearn.log_model(rf, "model")
     mlflow.sklearn.save_model(rf, "saved_model")
 
